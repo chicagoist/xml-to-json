@@ -40,4 +40,5 @@ public class XmlToJsonConversion {
         Path filename = Paths.get(outputPath);
         Files.write(filename, jsonString.getBytes());
     }
+
 }
