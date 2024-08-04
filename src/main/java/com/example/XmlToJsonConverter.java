@@ -19,6 +19,7 @@ public class XmlToJsonConverter {
     public static void convert(String xmlFilePath, String outputDir) throws Exception {
         logger.info("Converting XML file: {}", xmlFilePath);
         File xmlFile = new File(xmlFilePath);
+        String baseName = xmlFile.getName().replaceFirst("[.][^.]+$", ""); // Получение имени файла без расширения
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
@@ -86,11 +87,13 @@ public class XmlToJsonConverter {
 
         Gson gson = new GsonBuilder().setPrettyPrinting().registerTypeAdapter(JsonStructure.class, new UppercaseKeysSerializer()).create();
         String json = gson.toJson(jsonStructure);
-        FileWriter writer = new FileWriter(outputDir + "/HSCTWXXNUM_I_00054" + commodityCodeList.get(0).CommodityCode + ".json");
+        String jsonFilePath = outputDir + "/" + baseName + ".json";
+        FileWriter writer = new FileWriter(jsonFilePath);
         writer.write(json);
         writer.close();
-        logger.info("Converted XML to JSON: {}", outputDir + "/HSCTWXXNUM_I_00054" + commodityCodeList.get(0).CommodityCode + ".json");
+        logger.info("Converted XML to JSON: {}", jsonFilePath);
     }
+
 
     private static void concatenateTexts(CommodityCode commodityCode, Map<String, Level> levels, String parentId) {
         StringBuilder enConcatenation = new StringBuilder();
